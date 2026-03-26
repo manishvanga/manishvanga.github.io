@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Manish Vanga — Digital Marketing Executive</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;font-size:16px;}
+:root{
+  --bg:#04040A;
+  --bg2:#080810;
+  --bg3:#0D0D1A;
+  --bg4:#121224;
+  --cyan:#00F5FF;
+  --cyan2:#00C8D4;
+  --violet:#7B5CF5;
+  --violet2:#9B7FF7;
+  --pink:#F542A8;
+  --text:#F0F0FF;
+  --text2:#9090B0;
+  --text3:#505070;
+  --bdr:rgba(255,255,255,0.06);
+  --bdr2:rgba(0,245,255,0.2);
+  --glow:rgba(0,245,255,0.15);
+  --serif:'Syne',sans-serif;
+  --sans:'Outfit',sans-serif;
+  --ease:cubic-bezier(0.22,1,0.36,1);
+}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+a{color:inherit;text-decoration:none;}
+button{font-family:var(--sans);}
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--cyan);border-radius:2px;}
+
+/* ── CURSOR ── */
+#cur{position:fixed;width:12px;height:12px;background:var(--cyan);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:screen;transition:width .3s,height .3s,background .3s;}
+#cur-ring{position:fixed;width:44px;height:44px;border:1px solid rgba(0,245,255,0.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .4s var(--ease),height .4s var(--ease);}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:300;
+  height:66px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 48px;
+  border-bottom:1px solid transparent;
+  transition:all .4s;
+}
+nav.on{background:rgba(4,4,10,0.88);border-color:var(--bdr);backdrop-filter:blur(20px);}
+.n-logo{
+  font-family:var(--serif);font-weight:800;font-size:20px;letter-spacing:2px;
+  text-transform:uppercase;cursor:pointer;
+  background:linear-gradient(90deg,var(--cyan),var(--violet));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.n-links{display:flex;list-style:none;gap:2px;}
+.n-links a{
+  display:block;padding:7px 14px;font-size:11px;letter-spacing:2px;text-transform:uppercase;
+  font-weight:500;color:var(--text3);cursor:pointer;transition:color .2s;position:relative;
+}
+.n-links a:hover,.n-links a.on{color:var(--cyan);}
+.n-btns{display:flex;gap:10px;}
+.nb1{padding:9px 20px;background:transparent;border:1px solid var(--bdr2);border-radius:4px;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--cyan);cursor:pointer;transition:all .25s;}
+.nb1:hover{background:rgba(0,245,255,0.08);box-shadow:0 0 20px rgba(0,245,255,0.2);}
+.nb2{padding:9px 22px;background:linear-gradient(135deg,var(--cyan),var(--violet));border:none;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--bg);cursor:pointer;transition:all .25s;}
+.nb2:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,245,255,0.35);}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:6px;}
+.hbl{width:22px;height:1.5px;background:var(--text2);border-radius:2px;transition:all .3s var(--ease);}
+.hamburger.open .hbl:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+.hamburger.open .hbl:nth-child(2){opacity:0;}
+.hamburger.open .hbl:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+@media(max-width:900px){
+  nav{padding:0 20px;}
+  .n-links,.nb1{display:none;}
+  .hamburger{display:flex;}
+}
+.mob-menu{
+  position:fixed;inset:0;top:66px;z-index:280;
+  background:rgba(4,4,10,0.97);backdrop-filter:blur(20px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+  opacity:0;pointer-events:none;transition:opacity .35s var(--ease);
+}
+.mob-menu.open{opacity:1;pointer-events:all;}
+.mob-menu a{font-family:var(--serif);font-size:34px;font-weight:700;color:var(--text2);padding:10px;cursor:pointer;transition:color .2s;letter-spacing:2px;}
+.mob-menu a:hover{color:var(--cyan);}
+.mob-btns{display:flex;gap:12px;margin-top:20px;}
+
+/* ── HERO ── */
+#hero{
+  position:relative;height:100vh;min-height:600px;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:0 48px;overflow:hidden;
+}
+@media(max-width:768px){#hero{padding:0 20px;}}
+#three-canvas{position:absolute;inset:0;z-index:0;}
+
+/* Noise grain overlay */
+#hero::before{
+  content:'';position:absolute;inset:0;z-index:1;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;opacity:.4;
+}
+
+.hero-content{position:relative;z-index:2;max-width:800px;}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:11px;letter-spacing:3px;text-transform:uppercase;font-weight:600;
+  color:var(--cyan);margin-bottom:28px;
+  animation:fadeUp .7s .2s var(--ease) both;
+}
+.htag-line{width:32px;height:1px;background:var(--cyan);}
+.hero-h1{
+  font-family:var(--serif);font-weight:800;
+  font-size:clamp(52px,9vw,130px);
+  line-height:.88;letter-spacing:-2px;
+  margin-bottom:28px;
+  animation:fadeUp .8s .3s var(--ease) both;
+}
+.h1-line1{display:block;color:var(--text);}
+.h1-line2{
+  display:block;
+  background:linear-gradient(90deg,var(--cyan),var(--violet),var(--pink));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-size:200%;animation:gradShift 4s ease-in-out infinite alternate, fadeUp .8s .35s var(--ease) both;
+}
+@keyframes gradShift{from{background-position:0%;}to{background-position:100%;}}
+.h1-line3{display:block;color:transparent;-webkit-text-stroke:1px rgba(240,240,255,0.2);font-size:clamp(40px,7vw,100px);}
+.hero-sub{
+  font-size:16px;line-height:1.85;color:var(--text2);max-width:500px;margin-bottom:40px;
+  animation:fadeUp .8s .45s var(--ease) both;
+}
+.hero-sub strong{color:var(--text);}
+.hero-btns{
+  display:flex;flex-wrap:wrap;gap:12px;
+  animation:fadeUp .8s .55s var(--ease) both;
+}
+.btn-glow{
+  padding:14px 32px;background:linear-gradient(135deg,var(--cyan),var(--violet));
+  border:none;border-radius:6px;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--bg);cursor:pointer;transition:all .3s var(--ease);position:relative;overflow:hidden;
+}
+.btn-glow::before{content:'';position:absolute;inset:0;background:rgba(255,255,255,0.15);opacity:0;transition:opacity .3s;}
+.btn-glow:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,245,255,0.35);}
+.btn-glow:hover::before{opacity:1;}
+.btn-ghost{
+  padding:14px 32px;background:transparent;
+  border:1px solid var(--bdr2);border-radius:6px;font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--cyan);cursor:pointer;transition:all .3s;
+}
+.btn-ghost:hover{background:rgba(0,245,255,0.08);box-shadow:0 0 24px rgba(0,245,255,0.2);}
+
+/* floating stats */
+.hero-stats{
+  position:absolute;right:48px;top:50%;transform:translateY(-50%);
+  display:flex;flex-direction:column;gap:12px;z-index:2;
+  animation:fadeLeft .8s .6s var(--ease) both;
+}
+@media(max-width:1100px){.hero-stats{display:none;}}
+.hstat{
+  padding:18px 22px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--bdr);
+  border-radius:10px;
+  backdrop-filter:blur(16px);
+  text-align:right;
+  transition:all .3s;
+  position:relative;overflow:hidden;
+}
+.hstat::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(0,245,255,0.05),transparent);
+  opacity:0;transition:opacity .3s;
+}
+.hstat:hover{border-color:var(--bdr2);transform:translateX(-4px);}
+.hstat:hover::before{opacity:1;}
+.hs-n{font-family:var(--serif);font-size:36px;font-weight:800;color:var(--cyan);line-height:1;letter-spacing:-1px;}
+.hs-l{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);}
+
+/* scroll hint */
+.scroll-hint{
+  position:absolute;bottom:36px;left:50%;transform:translateX(-50%);
+  z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;
+  font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);
+  animation:fadeUp 1s 1s var(--ease) both;
+}
+.scroll-line{width:1px;height:50px;background:linear-gradient(to bottom,var(--cyan),transparent);animation:lineDown 2s ease-in-out infinite;}
+@keyframes lineDown{0%,100%{transform:scaleY(1);opacity:.6;}50%{transform:scaleY(1.3);opacity:1;}}
+
+/* ── MARQUEE ── */
+.marquee{overflow:hidden;padding:14px 0;border-top:1px solid var(--bdr);border-bottom:1px solid var(--bdr);position:relative;}
+.marquee::before,.marquee::after{content:'';position:absolute;top:0;bottom:0;width:100px;z-index:2;}
+.marquee::before{left:0;background:linear-gradient(to right,var(--bg),transparent);}
+.marquee::after{right:0;background:linear-gradient(to left,var(--bg),transparent);}
+.mq{display:flex;animation:mq 25s linear infinite;}
+.mi{display:inline-flex;align-items:center;gap:18px;padding:0 20px;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--text3);flex-shrink:0;}
+.mi-dot{width:4px;height:4px;background:var(--cyan);border-radius:50%;}
+@keyframes mq{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* ── SECTION BASE ── */
+.sec{padding:100px 48px;border-bottom:1px solid var(--bdr);position:relative;}
+@media(max-width:768px){.sec{padding:72px 20px;}}
+.sec-alt{background:var(--bg2);}
+.sec-label{display:flex;align-items:center;gap:14px;margin-bottom:12px;}
+.sl-text{font-size:11px;letter-spacing:3px;text-transform:uppercase;font-weight:600;color:var(--cyan);}
+.sl-line{flex:1;height:1px;background:linear-gradient(to right,var(--bdr2),transparent);}
+h2.sh{
+  font-family:var(--serif);font-weight:800;
+  font-size:clamp(36px,5.5vw,72px);
+  line-height:.92;letter-spacing:-2px;color:var(--text);
+  margin-bottom:60px;
+}
+h2.sh em{font-style:normal;background:linear-gradient(90deg,var(--cyan),var(--violet));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+
+/* ── ABOUT ── */
+.about-grid{display:grid;gap:60px;}
+@media(min-width:900px){.about-grid{grid-template-columns:1.2fr .8fr;gap:80px;}}
+.about-p{font-size:15px;line-height:1.95;color:var(--text2);margin-bottom:18px;}
+.about-p strong{color:var(--text);font-weight:500;}
+.about-facts{margin-top:32px;}
+.af{display:flex;gap:14px;padding:13px 0;border-bottom:1px solid var(--bdr);font-size:13px;color:var(--text2);align-items:flex-start;transition:color .2s;}
+.af:hover{color:var(--text);}
+.afi{color:var(--cyan);flex-shrink:0;margin-top:2px;}
+
+/* 3D tilt cards */
+.tilt-cards{display:flex;flex-direction:column;gap:14px;}
+.tcard{
+  padding:26px;
+  background:var(--bg3);
+  border:1px solid var(--bdr);
+  border-radius:14px;
+  transform-style:preserve-3d;
+  transform:perspective(800px) rotateX(0) rotateY(0);
+  transition:border-color .3s,box-shadow .3s;
+  position:relative;overflow:hidden;
+  cursor:default;
+}
+.tcard::before{
+  content:'';position:absolute;inset:0;border-radius:14px;
+  background:linear-gradient(135deg,rgba(0,245,255,0.04),rgba(123,92,245,0.04));
+  opacity:0;transition:opacity .3s;
+}
+.tcard:hover{border-color:var(--bdr2);box-shadow:0 20px 60px rgba(0,245,255,0.12);}
+.tcard:hover::before{opacity:1;}
+.tc-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.tc-tag{font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:700;color:var(--cyan);}
+.tc-icon{font-size:22px;}
+.tc-title{font-family:var(--serif);font-size:18px;font-weight:700;color:var(--text);margin-bottom:6px;}
+.tc-desc{font-size:13px;color:var(--text3);line-height:1.7;}
+
+/* ── RESULTS ── */
+.res-grid{display:grid;gap:1px;background:var(--bdr);border-radius:16px;overflow:hidden;margin-bottom:14px;}
+@media(min-width:700px){.res-grid{grid-template-columns:repeat(3,1fr);}}
+.rcard{
+  background:var(--bg);padding:48px 36px;position:relative;overflow:hidden;
+  transition:background .3s;
+}
+.rcard:hover{background:var(--bg3);}
+.rcard-bg{
+  position:absolute;width:240px;height:240px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(0,245,255,0.08),transparent 70%);
+  top:-80px;right:-80px;pointer-events:none;
+  opacity:0;transition:opacity .4s;
+}
+.rcard:hover .rcard-bg{opacity:1;}
+.rcard-n{font-family:var(--serif);font-size:clamp(60px,8vw,88px);font-weight:800;line-height:1;letter-spacing:-4px;margin-bottom:12px;}
+.rcard-n .num{background:linear-gradient(135deg,var(--cyan),var(--violet));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.rcard-n .sym{color:var(--cyan);}
+.rcard-t{font-size:13px;font-weight:600;color:var(--text);margin-bottom:7px;}
+.rcard-d{font-size:13px;color:var(--text3);line-height:1.7;}
+.res-mini{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--bdr);border-radius:12px;overflow:hidden;}
+@media(min-width:600px){.res-mini{grid-template-columns:repeat(4,1fr);}}
+.rm{background:var(--bg2);padding:24px 20px;transition:background .2s;}
+.rm:hover{background:var(--bg3);}
+.rm-v{font-family:var(--serif);font-size:30px;font-weight:800;color:var(--cyan);margin-bottom:4px;}
+.rm-l{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text3);}
+
+/* ── EXPERIENCE ── */
+.exp-list{display:flex;flex-direction:column;}
+.exp-item{
+  padding:40px 0;border-bottom:1px solid var(--bdr);
+  opacity:0;transform:translateY(20px);transition:all .55s var(--ease);
+}
+.exp-item.vis{opacity:1;transform:translateY(0);}
+.exp-item:last-child{border-bottom:none;}
+@media(min-width:800px){.exp-item{display:grid;grid-template-columns:210px 1fr;gap:44px;}}
+.exp-left{margin-bottom:16px;}
+@media(min-width:800px){.exp-left{margin-bottom:0;}}
+.exp-period{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;color:var(--cyan);margin-bottom:6px;}
+.exp-co{font-family:var(--serif);font-size:18px;font-weight:700;color:var(--text);margin-bottom:3px;}
+.exp-loc{font-size:12px;color:var(--text3);margin-bottom:10px;}
+.ebadge{display:inline-block;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border-radius:20px;}
+.eb-live{background:rgba(0,245,255,0.12);color:var(--cyan);border:1px solid rgba(0,245,255,0.3);}
+.eb-past{background:var(--bg4);color:var(--text3);border:1px solid var(--bdr);}
+.exp-link{display:inline-flex;align-items:center;gap:5px;margin-top:10px;font-size:11px;font-weight:500;color:var(--text3);border-bottom:1px solid transparent;transition:all .2s;padding-bottom:1px;}
+.exp-link:hover{color:var(--cyan);border-color:var(--cyan);}
+.exp-rh{font-family:var(--serif);font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--text);margin-bottom:18px;line-height:1.1;}
+.exp-pts{list-style:none;display:flex;flex-direction:column;gap:11px;}
+.exp-pts li{font-size:14px;color:var(--text2);line-height:1.75;display:flex;gap:12px;}
+.exp-pts li::before{content:'→';color:var(--cyan);flex-shrink:0;font-size:13px;margin-top:3px;}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:18px;}
+.chip{font-size:10px;font-weight:500;letter-spacing:.8px;padding:4px 12px;border:1px solid var(--bdr);border-radius:20px;color:var(--text3);transition:all .2s;}
+.chip:hover{border-color:rgba(0,245,255,0.4);color:var(--cyan);}
+.exp-sub{margin-top:24px;padding-top:20px;border-top:1px dashed rgba(255,255,255,.06);}
+.esh{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;margin-bottom:14px;}
+.esh-t{font-size:13px;font-weight:600;color:var(--text);}
+.esh-p{font-size:11px;color:var(--cyan);letter-spacing:1px;}
+
+/* ── PROJECTS ── */
+.proj-grid{display:grid;gap:16px;}
+@media(min-width:700px){.proj-grid{grid-template-columns:1fr 1fr;}}
+.pcard{
+  border-radius:16px;overflow:hidden;background:var(--bg2);
+  border:1px solid var(--bdr);
+  transform-style:preserve-3d;
+  transform:perspective(1000px);
+  transition:border-color .3s,box-shadow .3s;
+  opacity:0;transform:translateY(28px);transition:all .55s var(--ease);
+}
+.pcard.vis{opacity:1;transform:translateY(0) perspective(1000px);}
+.pcard:hover{border-color:var(--bdr2);box-shadow:0 24px 60px rgba(0,0,0,.5),0 0 60px rgba(0,245,255,0.08);}
+
+.pt-wrap{height:190px;overflow:hidden;position:relative;}
+@media(min-width:700px){.pt-wrap{height:210px;}}
+.pt{height:100%;width:100%;display:flex;align-items:center;justify-content:center;position:relative;transition:transform .5s var(--ease);}
+.pcard:hover .pt{transform:scale(1.05);}
+.p1{background:linear-gradient(135deg,#040C1A 0%,#071830 50%,#0A2448 100%);}
+.p2{background:linear-gradient(135deg,#0A0420 0%,#150830 50%,#200C48 100%);}
+.p3{background:linear-gradient(135deg,#020C04 0%,#051808 50%,#0A2810 100%);}
+.p4{background:linear-gradient(135deg,#1A0502 0%,#2E0E04 50%,#3E1506 100%);}
+.p5{background:linear-gradient(135deg,#001A0A 0%,#003018 50%,#004820 100%);}
+.p6{background:linear-gradient(135deg,#001020 0%,#001C38 50%,#002850 100%);}
+.ppill{position:absolute;top:12px;left:12px;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:5px 12px;background:linear-gradient(135deg,var(--cyan),var(--violet));color:var(--bg);border-radius:20px;}
+.plive{position:absolute;top:12px;right:12px;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 12px;background:rgba(0,245,255,0.1);color:var(--cyan);border:1px solid rgba(0,245,255,0.3);border-radius:20px;display:flex;align-items:center;gap:5px;transition:background .2s;}
+.plive:hover{background:rgba(0,245,255,0.2);}
+.plive-dot{width:5px;height:5px;background:#4CAF50;border-radius:50%;animation:pulse 2s ease-in-out infinite;}
+/* glowing 3D browser */
+.gl-browser{width:75%;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:12px;box-shadow:0 0 40px rgba(0,245,255,0.06),inset 0 0 20px rgba(0,245,255,0.02);}
+.glb-bar{display:flex;align-items:center;gap:5px;margin-bottom:10px;}
+.glb-d{width:6px;height:6px;border-radius:50%;}
+.glb-line{height:3px;border-radius:2px;background:rgba(255,255,255,0.06);margin-bottom:4px;}
+.glb-cyan{background:linear-gradient(90deg,var(--cyan),var(--violet));width:55%;height:4px;}
+.glb-g2{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:6px;}
+.glb-blk{height:22px;background:rgba(255,255,255,0.04);border-radius:4px;}
+
+.pb{padding:22px 24px;}
+.pidx{font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:500;color:var(--text3);margin-bottom:5px;}
+.ptitle{font-family:var(--serif);font-size:22px;font-weight:700;color:var(--text);margin-bottom:8px;}
+.pdesc{font-size:13px;color:var(--text2);line-height:1.75;margin-bottom:16px;}
+.pmetrics{display:flex;gap:20px;padding-bottom:14px;border-bottom:1px solid var(--bdr);margin-bottom:12px;}
+.pmv{display:block;font-family:var(--serif);font-size:20px;font-weight:700;color:var(--cyan);line-height:1;}
+.pml{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--text3);}
+.pfoot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
+.ptags{display:flex;flex-wrap:wrap;gap:5px;}
+.ptag{font-size:10px;padding:3px 9px;border:1px solid var(--bdr);border-radius:20px;color:var(--text3);}
+.pvisit{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--cyan);border-bottom:1px solid transparent;transition:border-color .2s;white-space:nowrap;}
+.pvisit:hover{border-color:var(--cyan);}
+
+/* ── PROCESS ── */
+.proc-grid{display:grid;gap:1px;background:var(--bdr);border-radius:16px;overflow:hidden;}
+@media(min-width:700px){.proc-grid{grid-template-columns:repeat(2,1fr);}}
+@media(min-width:1000px){.proc-grid{grid-template-columns:repeat(4,1fr);}}
+.ps{background:var(--bg2);padding:40px 28px;transition:background .3s;position:relative;overflow:hidden;}
+.ps:hover{background:var(--bg3);}
+.ps::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--violet));transform:scaleX(0);transform-origin:left;transition:transform .4s var(--ease);}
+.ps:hover::after{transform:scaleX(1);}
+.ps-n{font-family:var(--serif);font-size:52px;font-weight:800;color:rgba(0,245,255,0.08);line-height:1;margin-bottom:18px;letter-spacing:-2px;}
+.ps-icon{font-size:26px;margin-bottom:12px;}
+.ps-title{font-family:var(--serif);font-size:19px;font-weight:700;color:var(--text);margin-bottom:8px;}
+.ps-desc{font-size:13px;color:var(--text3);line-height:1.75;}
+
+/* ── SKILLS ── */
+.skills-grid{display:grid;gap:56px;}
+@media(min-width:900px){.skills-grid{grid-template-columns:1fr 1fr;}}
+.sk-cat{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;font-weight:700;color:var(--cyan);margin-bottom:18px;padding-bottom:10px;border-bottom:1px solid var(--bdr);}
+.sk-bars{display:flex;flex-direction:column;gap:18px;margin-bottom:36px;}
+.sb-row{display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px;}
+.sb-name{color:var(--text2);}
+.sb-pct{font-size:11px;color:var(--text3);}
+.sb-track{height:2px;background:var(--bg4);border-radius:2px;overflow:visible;}
+.sb-fill{
+  height:100%;width:0;border-radius:2px;
+  background:linear-gradient(90deg,var(--cyan),var(--violet));
+  transition:width 1.6s var(--ease);position:relative;
+}
+.sb-fill::after{content:'';position:absolute;right:-1px;top:-4px;width:10px;height:10px;background:var(--cyan);border-radius:50%;box-shadow:0 0 14px var(--cyan);}
+.tools-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.tool{padding:16px 10px;text-align:center;background:var(--bg3);border:1px solid var(--bdr);border-radius:10px;transition:all .3s;}
+.tool:hover{border-color:var(--bdr2);background:rgba(0,245,255,0.04);transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,245,255,0.1);}
+.tool-icon{font-size:22px;margin-bottom:6px;}
+.tool-name{font-size:10px;font-weight:500;color:var(--text3);}
+
+/* ── SERVICES ── */
+.sv-grid{display:grid;gap:12px;}
+@media(min-width:600px){.sv-grid{grid-template-columns:1fr 1fr;}}
+@media(min-width:1000px){.sv-grid{grid-template-columns:repeat(3,1fr);}}
+.sv{padding:30px 26px;background:var(--bg2);border:1px solid var(--bdr);border-radius:14px;transition:all .3s var(--ease);position:relative;overflow:hidden;}
+.sv::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),var(--violet),transparent);transform:scaleX(0);transform-origin:left;transition:transform .4s var(--ease);}
+.sv:hover{border-color:var(--bdr2);transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,.3),0 0 40px rgba(0,245,255,0.06);}
+.sv:hover::before{transform:scaleX(1);}
+.sv-icon{font-size:28px;margin-bottom:14px;}
+.sv-title{font-family:var(--serif);font-size:19px;font-weight:700;color:var(--text);margin-bottom:8px;}
+.sv-desc{font-size:13px;color:var(--text3);line-height:1.7;margin-bottom:12px;}
+.sv-list{list-style:none;display:flex;flex-direction:column;gap:6px;}
+.sv-list li{font-size:12px;color:var(--text3);display:flex;gap:8px;line-height:1.5;}
+.sv-list li::before{content:'·';color:var(--cyan);font-size:18px;line-height:1;flex-shrink:0;}
+
+/* ── EDUCATION ── */
+.edu-grid{display:grid;gap:12px;margin-bottom:12px;}
+@media(min-width:700px){.edu-grid{grid-template-columns:1fr 1fr;}}
+.edu-card{padding:28px;background:var(--bg2);border:1px solid var(--bdr);border-radius:14px;transition:all .3s var(--ease);}
+.edu-card:hover{border-color:var(--bdr2);transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,245,255,0.08);}
+.edu-y{font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:600;color:var(--cyan);margin-bottom:8px;}
+.edu-d{font-family:var(--serif);font-size:19px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.edu-s{font-size:13px;font-weight:500;color:var(--text2);}
+.edu-l{font-size:12px;color:var(--text3);margin-top:2px;}
+.edu-tag{display:inline-block;margin-top:12px;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:3px 10px;background:rgba(0,245,255,0.08);border:1px solid rgba(0,245,255,0.25);border-radius:20px;color:var(--cyan);}
+.iit-card{padding:26px 30px;background:var(--bg2);border:1px solid var(--bdr2);border-radius:14px;display:flex;align-items:center;gap:20px;transition:all .3s var(--ease);}
+.iit-card:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,245,255,0.1);}
+.iit-icon{font-size:34px;flex-shrink:0;}
+.iit-y{font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:600;color:var(--cyan);margin-bottom:5px;}
+.iit-t{font-family:var(--serif);font-size:19px;font-weight:700;color:var(--text);margin-bottom:3px;}
+.iit-d{font-size:13px;color:var(--text3);line-height:1.6;}
+
+/* ── CONTACT ── */
+#contact{border-bottom:none;position:relative;overflow:hidden;}
+#contact::before{content:'';position:absolute;width:600px;height:600px;background:radial-gradient(circle,rgba(0,245,255,0.05),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
+.ct-inner{max-width:700px;margin:0 auto;text-align:center;position:relative;z-index:1;}
+#contact .sec-label{justify-content:center;}
+#contact .sh{text-align:center;margin-bottom:16px;}
+.ct-para{font-size:16px;color:var(--text2);line-height:1.85;margin-bottom:44px;}
+.ct-email{
+  display:inline-block;
+  font-family:var(--serif);font-size:clamp(18px,3.5vw,34px);font-weight:700;
+  background:linear-gradient(90deg,var(--cyan),var(--violet));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  margin-bottom:36px;cursor:pointer;
+  border-bottom:1px solid rgba(0,245,255,0.3);padding-bottom:3px;
+  transition:all .3s;
+}
+.ct-email:hover{filter:brightness(1.2);}
+.ct-btns{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-bottom:44px;}
+.ct-btn{display:inline-flex;align-items:center;gap:7px;padding:11px 20px;border:1px solid var(--bdr);border-radius:6px;font-size:11px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:var(--text3);background:transparent;cursor:pointer;transition:all .2s;}
+.ct-btn:hover{border-color:var(--bdr2);color:var(--cyan);box-shadow:0 0 16px rgba(0,245,255,0.1);}
+.avail{display:inline-flex;align-items:center;gap:9px;font-size:12px;color:var(--text3);}
+.av-dot{width:7px;height:7px;background:#4CAF50;border-radius:50%;animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.3;transform:scale(.65);}}
+
+/* ── FOOTER ── */
+footer{padding:24px 48px;border-top:1px solid var(--bdr);display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center;background:var(--bg);}
+@media(min-width:700px){footer{flex-direction:row;justify-content:space-between;text-align:left;}}
+.fl,.fr{font-size:12px;color:var(--text3);}
+
+/* ── MODALS ── */
+.overlay{position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.85);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(10px);}
+@media(min-width:600px){.overlay{align-items:center;}}
+.overlay.open{opacity:1;pointer-events:all;}
+.modal{background:var(--bg2);border:1px solid var(--bdr);border-radius:20px 20px 0 0;padding:32px 24px;width:100%;max-width:100%;position:relative;max-height:90svh;overflow-y:auto;transform:translateY(40px);transition:transform .35s var(--ease);box-shadow:0 -20px 60px rgba(0,0,0,.5),0 0 40px rgba(0,245,255,0.05);}
+@media(min-width:600px){.modal{border-radius:16px;max-width:560px;padding:44px;transform:translateY(20px) scale(.97);}}
+.overlay.open .modal{transform:translateY(0) scale(1);}
+.modal-handle{width:36px;height:4px;background:var(--bg4);border-radius:2px;margin:0 auto 20px;}
+@media(min-width:600px){.modal-handle{display:none;}}
+.mx{position:absolute;top:16px;right:16px;width:32px;height:32px;background:var(--bg3);border:1px solid var(--bdr);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--text3);cursor:pointer;transition:all .2s;}
+.mx:hover{border-color:var(--bdr2);color:var(--cyan);}
+.mh{font-family:var(--serif);font-weight:700;font-size:26px;color:var(--text);margin-bottom:4px;}
+.ms{font-size:13px;color:var(--text3);margin-bottom:24px;line-height:1.6;}
+.fg{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;}
+.fg label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;font-weight:500;color:var(--text3);}
+.fg input,.fg textarea,.fg select{padding:11px 14px;background:var(--bg3);border:1px solid var(--bdr);border-radius:8px;font-family:var(--sans);font-size:14px;color:var(--text);outline:none;transition:border-color .25s;width:100%;}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:rgba(0,245,255,0.4);}
+.fg textarea{resize:vertical;min-height:90px;}
+.fg select{appearance:none;cursor:pointer;}
+.fg select option{background:var(--bg2);}
+.frow2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+.frow2 .fg{margin-bottom:0;}
+@media(max-width:480px){.frow2{grid-template-columns:1fr;}}
+.fsub{width:100%;padding:14px;background:linear-gradient(135deg,var(--cyan),var(--violet));color:var(--bg);border:none;border-radius:8px;font-family:var(--sans);font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all .3s;margin-top:4px;}
+.fsub:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,245,255,0.3);}
+.mfoot{display:flex;flex-wrap:wrap;gap:14px;margin-top:18px;padding-top:16px;border-top:1px solid var(--bdr);}
+.mfl{font-size:12px;color:var(--text3);cursor:pointer;transition:color .2s;}
+.mfl:hover{color:var(--cyan);}
+.rs-sec{margin-bottom:22px;}
+.rs-h{font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:700;color:var(--cyan);margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--bdr);}
+.rs-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.03);}
+.rs-l{font-size:12px;color:var(--text2);line-height:1.4;}
+.rs-r{font-size:11px;color:var(--text3);white-space:nowrap;flex-shrink:0;}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeLeft{from{opacity:0;transform:translateX(28px);}to{opacity:1;transform:translateX(0);}}
+.fade-up{opacity:0;transform:translateY(24px);transition:opacity .6s var(--ease),transform .6s var(--ease);}
+.fade-up.vis{opacity:1;transform:translateY(0);}
+#toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(12px);background:var(--bg3);border:1px solid rgba(0,245,255,0.3);color:var(--cyan);padding:11px 22px;border-radius:8px;font-size:12px;font-weight:500;z-index:700;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;backdrop-filter:blur(12px);box-shadow:0 6px 24px rgba(0,245,255,0.15);}
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div id="cur"></div>
+<div id="cur-ring"></div>
+
+<!-- CONTACT MODAL -->
+<div class="overlay" id="contactModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <button class="mx" onclick="closeModal('contactModal')">✕</button>
+    <div class="mh">Let's build something.</div>
+    <div class="ms">Tell me what you need — I'll respond within 24 hours.</div>
+    <div class="frow2">
+      <div class="fg"><label>Your Name</label><input type="text" placeholder="John Smith"></div>
+      <div class="fg"><label>Email</label><input type="email" placeholder="john@co.com"></div>
+    </div>
+    <div class="fg"><label>Company</label><input type="text" placeholder="Optional"></div>
+    <div class="fg"><label>What do you need?</label>
+      <select><option>SEO Strategy</option><option>Google Ads / SEM</option><option>LinkedIn B2B</option><option>Meta Ads</option><option>WordPress / WooCommerce</option><option>Email Marketing Funnel</option><option>AI-Powered Marketing</option><option>Full-Stack Digital Marketing</option><option>Other</option></select>
+    </div>
+    <div class="fg"><label>Message</label><textarea placeholder="Project details, goals, timeline..."></textarea></div>
+    <button class="fsub" id="submitBtn" onclick="handleSubmit()">Send Message →</button>
+    <div class="mfoot">
+      <span class="mfl" onclick="copyText('manishvanga1111@gmail.com')">✉ <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="432e222d2a302b35222d24227272727203242e222a2f6d202c2e">[email&#160;protected]</a></span>
+      <span class="mfl">📞 +91-8143557336</span>
+    </div>
+  </div>
+</div>
+
+<!-- RESUME MODAL -->
+<div class="overlay" id="resumeModal">
+  <div class="modal" style="max-width:620px;">
+    <div class="modal-handle"></div>
+    <button class="mx" onclick="closeModal('resumeModal')">✕</button>
+    <div class="mh">Manish Vanga</div>
+    <div class="ms">Digital Marketing Executive · Hyderabad, India</div>
+    <div class="rs-sec"><div class="rs-h">Experience</div>
+      <div class="rs-row"><span class="rs-l">Digital Marketing Executive — AITA Consulting Services</span><span class="rs-r">Dec 2025–Present</span></div>
+      <div class="rs-row"><span class="rs-l">Digital Marketing Executive — Sphere Global</span><span class="rs-r">Apr 2024–Dec 2025</span></div>
+      <div class="rs-row"><span class="rs-l">Digital Marketing Intern — Sphere Global</span><span class="rs-r">Nov 2023–Apr 2024</span></div>
+      <div class="rs-row"><span class="rs-l">Digital Marketing Intern — Creoverse</span><span class="rs-r">May–Sep 2023</span></div>
+      <div class="rs-row"><span class="rs-l">Member — Mood Indigo, IIT Bombay</span><span class="rs-r">Sep 2022–Jan 2023</span></div>
+    </div>
+    <div class="rs-sec"><div class="rs-h">Education</div>
+      <div class="rs-row"><span class="rs-l">BBA — REVA University, Bangalore</span><span class="rs-r">2020–2023</span></div>
+      <div class="rs-row"><span class="rs-l">Intermediate — Sri Chaitanya Jr. College</span><span class="rs-r">2018–2020</span></div>
+    </div>
+    <div class="rs-sec"><div class="rs-h">Key Results</div>
+      <div class="rs-row"><span class="rs-l">+30% organic traffic via SEO</span><span class="rs-r">Sphere Global</span></div>
+      <div class="rs-row"><span class="rs-l">50+ qualified B2B leads via LinkedIn</span><span class="rs-r">Sphere Global</span></div>
+      <div class="rs-row"><span class="rs-l">LinkedIn: 600 → 1,200+ followers</span><span class="rs-r">Sphere Global</span></div>
+    </div>
+    <button class="fsub" onclick="closeModal('resumeModal');openModal('contactModal')">Get in Touch →</button>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="n-logo" onclick="window.scrollTo({top:0,behavior:'smooth'})">MV</div>
+  <ul class="n-links">
+    <li><a onclick="nav('about')">About</a></li>
+    <li><a onclick="nav('results')">Results</a></li>
+    <li><a onclick="nav('experience')">Experience</a></li>
+    <li><a onclick="nav('projects')">Work</a></li>
+    <li><a onclick="nav('skills')">Skills</a></li>
+    <li><a onclick="nav('tools-3d')">Tools</a></li>
+    <li><a onclick="nav('services')">Services</a></li>
+    <li><a onclick="nav('contact')">Contact</a></li>
+  </ul>
+  <div class="n-btns">
+    <button class="nb1" onclick="openModal('resumeModal')">Resume</button>
+    <button class="nb2" onclick="openModal('contactModal')">Hire Me →</button>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <div class="hbl"></div><div class="hbl"></div><div class="hbl"></div>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mob-menu" id="mobMenu">
+  <a onclick="nav('about');closeMenu()">About</a>
+  <a onclick="nav('results');closeMenu()">Results</a>
+  <a onclick="nav('experience');closeMenu()">Experience</a>
+  <a onclick="nav('projects');closeMenu()">Work</a>
+  <a onclick="nav('skills');closeMenu()">Skills</a>
+  <a onclick="nav('services');closeMenu()">Services</a>
+  <a onclick="nav('contact');closeMenu()">Contact</a>
+  <div class="mob-btns">
+    <button class="btn-ghost" onclick="openModal('resumeModal');closeMenu()">Resume</button>
+    <button class="btn-glow" onclick="openModal('contactModal');closeMenu()">Hire Me →</button>
+  </div>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <canvas id="three-canvas"></canvas>
+  <div class="hero-content">
+    <div class="hero-tag"><div class="htag-line"></div>Digital Marketer · Hyderabad</div>
+    <h1 class="hero-h1">
+      <span class="h1-line1">MANISH</span>
+      <span class="h1-line2">VANGA.</span>
+
+    </h1>
+    <p class="hero-sub">Driving online growth through <strong>SEO, Google Ads & Social Media</strong>. WordPress & WooCommerce specialist leveraging <strong>AI for smarter, faster</strong> digital strategies. 2.5+ years across AI logistics, consulting & e-commerce.</p>
+    <div class="hero-btns">
+      <button class="btn-glow" onclick="nav('results')">View Results ↓</button>
+      <button class="btn-ghost" onclick="openModal('contactModal')">Work With Me</button>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="hstat"><div class="hs-n">2.5+</div><div class="hs-l">Years Exp</div></div>
+    <div class="hstat"><div class="hs-n">50+</div><div class="hs-l">B2B Leads</div></div>
+    <div class="hstat"><div class="hs-n">30%</div><div class="hs-l">Traffic Growth</div></div>
+    <div class="hstat"><div class="hs-n">25+</div><div class="hs-l">Tools Mastered</div></div>
+  </div>
+  <div class="scroll-hint"><div class="scroll-line"></div>Scroll</div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee">
+  <div class="mq">
+    <span class="mi"><span class="mi-dot"></span>SEO Strategy</span><span class="mi"><span class="mi-dot"></span>Google Ads</span><span class="mi"><span class="mi-dot"></span>Meta Advertising</span><span class="mi"><span class="mi-dot"></span>WordPress</span><span class="mi"><span class="mi-dot"></span>WooCommerce</span><span class="mi"><span class="mi-dot"></span>LinkedIn B2B</span><span class="mi"><span class="mi-dot"></span>AI Marketing</span><span class="mi"><span class="mi-dot"></span>Google Merchant Center</span><span class="mi"><span class="mi-dot"></span>Email Funnels</span><span class="mi"><span class="mi-dot"></span>SEMrush · Canva</span><span class="mi"><span class="mi-dot"></span>B2B Lead Generation</span><span class="mi"><span class="mi-dot"></span>Analytics & Tracking</span>
+    <span class="mi"><span class="mi-dot"></span>SEO Strategy</span><span class="mi"><span class="mi-dot"></span>Google Ads</span><span class="mi"><span class="mi-dot"></span>Meta Advertising</span><span class="mi"><span class="mi-dot"></span>WordPress</span><span class="mi"><span class="mi-dot"></span>WooCommerce</span><span class="mi"><span class="mi-dot"></span>LinkedIn B2B</span><span class="mi"><span class="mi-dot"></span>AI Marketing</span><span class="mi"><span class="mi-dot"></span>Google Merchant Center</span><span class="mi"><span class="mi-dot"></span>Email Funnels</span><span class="mi"><span class="mi-dot"></span>SEMrush · Canva</span><span class="mi"><span class="mi-dot"></span>B2B Lead Generation</span><span class="mi"><span class="mi-dot"></span>Analytics & Tracking</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="sec" id="about">
+  <div class="sec-label"><span class="sl-text">About</span><div class="sl-line"></div></div>
+  <h2 class="sh fade-up">The person behind<br><em>the strategy.</em></h2>
+  <div class="about-grid">
+    <div class="fade-up">
+      <p class="about-p">I'm <strong>Manish Vanga</strong>, a Digital Marketing Executive with 2.5+ years across AI logistics, consulting, gaming, and e-commerce. Based in Hyderabad, currently driving growth at <strong>AITA Consulting Services</strong>.</p>
+      <p class="about-p">My strength lies in combining <strong>technical SEO</strong> with data-driven paid advertising and AI-assisted content to build marketing systems that compound into sustained growth.</p>
+      <p class="about-p">Previously 2+ years at <strong>Sphere Global</strong> — Top AI Logistics Company — growing from intern to full Digital Marketing Executive, owning SEO, LinkedIn, WordPress, and email funnels end-to-end.</p>
+      <div class="about-facts">
+        <div class="af"><span class="afi">→</span><span>BBA, Business Administration — REVA University, Bangalore (2020–2023)</span></div>
+        <div class="af"><span class="afi">→</span><span>Based in Hyderabad, TG · Open to hybrid & remote roles</span></div>
+        <div class="af"><span class="afi">→</span><span>Top skills: Canva · SEMrush · Google Merchant Center</span></div>
+        <div class="af"><span class="afi">→</span><span>IIT Bombay — Mood Indigo Team Member (Asia's largest cultural festival)</span></div>
+      </div>
+    </div>
+    <div class="tilt-cards fade-up" style="transition-delay:.1s">
+      <div class="tcard" id="tc1">
+        <div class="tc-top"><span class="tc-tag">Approach</span><span class="tc-icon">🤖</span></div>
+        <div class="tc-title">AI-Augmented Marketing</div>
+        <div class="tc-desc">Using ChatGPT, Gemini, and AI tools to create better content faster and find opportunities competitors miss.</div>
+      </div>
+      <div class="tcard" id="tc2">
+        <div class="tc-top"><span class="tc-tag">Mindset</span><span class="tc-icon">🎯</span></div>
+        <div class="tc-title">Performance-First</div>
+        <div class="tc-desc">Every campaign tied to real KPIs — traffic, CPL, ROAS. I measure what matters and optimise relentlessly.</div>
+      </div>
+      <div class="tcard" id="tc3">
+        <div class="tc-top"><span class="tc-tag">Capability</span><span class="tc-icon">🔧</span></div>
+        <div class="tc-title">Full-Stack Marketing</div>
+        <div class="tc-desc">From WooCommerce stores and Google Merchant Center to LinkedIn Sponsored Messages — end-to-end.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section class="sec sec-alt" id="results">
+  <div class="sec-label"><span class="sl-text">Impact</span><div class="sl-line"></div></div>
+  <h2 class="sh fade-up">Numbers that<br><em>prove it.</em></h2>
+  <div class="res-grid fade-up">
+    <div class="rcard"><div class="rcard-bg"></div><div class="rcard-n"><span class="num">30</span><span class="sym">%</span></div><div class="rcard-t">Website Traffic Increase</div><div class="rcard-d">Organic growth at Sphere Global through on-page SEO, backlinking, and guest blogging over 12 months.</div></div>
+    <div class="rcard"><div class="rcard-bg"></div><div class="rcard-n"><span class="num">50</span><span class="sym">+</span></div><div class="rcard-t">Qualified B2B Leads</div><div class="rcard-d">Via LinkedIn Sponsored Messages with precise ICP targeting, personalised copy, and multi-touch sequences.</div></div>
+    <div class="rcard"><div class="rcard-bg"></div><div class="rcard-n"><span class="num">2</span><span class="sym">×</span></div><div class="rcard-t">LinkedIn Audience Growth</div><div class="rcard-d">Doubled following from 600 → 1,200+ through consistent thought-leadership and community engagement.</div></div>
+  </div>
+  <div class="res-mini fade-up">
+    <div class="rm"><div class="rm-v">600+</div><div class="rm-l">New LinkedIn Followers</div></div>
+    <div class="rm"><div class="rm-v">6+</div><div class="rm-l">Websites Launched</div></div>
+    <div class="rm"><div class="rm-v">2.5+</div><div class="rm-l">Years Experience</div></div>
+    <div class="rm"><div class="rm-v">Full</div><div class="rm-l">Email Funnel Deployed</div></div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section class="sec" id="experience">
+  <div class="sec-label"><span class="sl-text">Career</span><div class="sl-line"></div></div>
+  <h2 class="sh fade-up">Where I've<br><em>worked.</em></h2>
+  <div class="exp-list">
+    <div class="exp-item">
+      <div class="exp-left">
+        <div class="exp-period">Dec 2025 — Present</div>
+        <div class="exp-co">AITA Consulting Services</div>
+        <div class="exp-loc">Hyderabad, Telangana</div>
+        <span class="ebadge eb-live">● Current Role</span>
+        <a class="exp-link" href="https://aitaconsulting.com" target="_blank">aitaconsulting.com ↗</a>
+      </div>
+      <div class="exp-right">
+        <div class="exp-rh">Digital Marketing Executive</div>
+        <ul class="exp-pts">
+          <li>Leading full digital marketing strategy — SEO, paid ads, AI-assisted content — driving qualified traffic and leads.</li>
+          <li>Managing WordPress website performance, technical SEO architecture, and UX improvements.</li>
+          <li>Leveraging ChatGPT and Gemini for content production, keyword strategy, and campaign optimisation at scale.</li>
+        </ul>
+        <div class="chips"><span class="chip">SEO</span><span class="chip">Google Ads</span><span class="chip">WordPress</span><span class="chip">AI Marketing</span><span class="chip">Content Strategy</span></div>
+      </div>
+    </div>
+    <div class="exp-item">
+      <div class="exp-left">
+        <div class="exp-period">Nov 2023 — Dec 2025</div>
+        <div class="exp-co">Sphere Global</div>
+        <div class="exp-loc">Top AI Logistics · Hyderabad</div>
+        <span class="ebadge eb-past">2 yrs 2 mos</span>
+        <a class="exp-link" href="https://sphereglobal.com" target="_blank">sphereglobal.com ↗</a>
+      </div>
+      <div class="exp-right">
+        <div class="esh"><span class="esh-t">Digital Marketing Executive</span><span class="esh-p">Apr 2024 – Dec 2025</span></div>
+        <ul class="exp-pts">
+          <li>Boosted website traffic 30% through on/off-page SEO, strategic backlinking, and guest blogging.</li>
+          <li>Generated 50+ qualified B2B leads via LinkedIn Sponsored Messages with ICP targeting.</li>
+          <li>Grew LinkedIn following from 600 → 1,200+ through consistent thought-leadership content.</li>
+          <li>Managed corporate WordPress site for speed, technical SEO, and mobile UX.</li>
+          <li>Designed and deployed a full email marketing funnel — prospect capture to multi-touch nurture sequences.</li>
+          <li>Wrote AI-assisted SEO blog content using ChatGPT and Gemini, improving keyword rankings.</li>
+        </ul>
+        <div class="exp-sub">
+          <div class="esh"><span class="esh-t">Digital Marketing Intern</span><span class="esh-p">Nov 2023 – Apr 2024 · 6 mos</span></div>
+          <ul class="exp-pts">
+            <li>Supported SEO, off-page link building, and social media management.</li>
+            <li>Assisted with WordPress maintenance, content updates, and Google Analytics reporting.</li>
+            <li>Created Canva designs for social media and marketing collateral.</li>
+          </ul>
+        </div>
+        <div class="chips" style="margin-top:18px;"><span class="chip">SEO</span><span class="chip">LinkedIn Ads</span><span class="chip">WordPress</span><span class="chip">Email Marketing</span><span class="chip">GA4</span><span class="chip">Canva</span><span class="chip">ChatGPT</span><span class="chip">B2B Lead Gen</span></div>
+      </div>
+    </div>
+    <div class="exp-item">
+      <div class="exp-left">
+        <div class="exp-period">May – Sep 2023</div>
+        <div class="exp-co">Creoverse</div>
+        <div class="exp-loc">Animation & Gaming · Bengaluru</div>
+        <span class="ebadge eb-past">5 mos · Intern</span>
+        <a class="exp-link" href="https://creoverse.com" target="_blank">creoverse.com ↗</a>
+      </div>
+      <div class="exp-right">
+        <div class="exp-rh">Digital Marketing Intern</div>
+        <ul class="exp-pts">
+          <li>Built responsive, SEO-friendly websites with clean architecture and strong UX fundamentals.</li>
+          <li>Designed social media graphics using Canva for brand campaigns.</li>
+          <li>Executed off-page SEO: Web 2.0 blogs, article submissions, and directory listings.</li>
+        </ul>
+        <div class="chips"><span class="chip">Off-Page SEO</span><span class="chip">Canva</span><span class="chip">Social Media</span><span class="chip">Link Building</span></div>
+      </div>
+    </div>
+    <div class="exp-item">
+      <div class="exp-left">
+        <div class="exp-period">Sep 2022 – Jan 2023</div>
+        <div class="exp-co">Mood Indigo — IIT Bombay</div>
+        <div class="exp-loc">Asia's Largest Cultural Festival</div>
+        <span class="ebadge eb-past">Volunteer</span>
+        <a class="exp-link" href="https://moodi.org" target="_blank">moodi.org ↗</a>
+      </div>
+      <div class="exp-right">
+        <div class="exp-rh">Team Member</div>
+        <ul class="exp-pts">
+          <li>Contributed to Asia's largest college cultural festival at IIT Bombay — large-scale event marketing and national-level brand communication.</li>
+          <li>Supported promotional activities and audience engagement for festival outreach.</li>
+        </ul>
+        <div class="chips"><span class="chip">Event Marketing</span><span class="chip">Brand Comms</span><span class="chip">IIT Bombay</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="sec sec-alt" id="projects">
+  <div class="sec-label"><span class="sl-text">Portfolio</span><div class="sl-line"></div></div>
+  <h2 class="sh fade-up">Selected<br><em>work.</em></h2>
+  <div class="proj-grid">
+    <div class="pcard"><div class="pt-wrap"><div class="pt p1"><span class="ppill">WordPress</span><a class="plive" href="https://jobapplyexpert.com" target="_blank"><span class="plive-dot"></span>Live ↗</a><div class="gl-browser"><div class="glb-bar"><div class="glb-d" style="background:#FF5F57"></div><div class="glb-d" style="background:#FEBC2E"></div><div class="glb-d" style="background:#28C840"></div></div><div class="glb-cyan"></div><div class="glb-line" style="width:88%"></div><div class="glb-line" style="width:66%"></div><div class="glb-g2"><div class="glb-blk"></div><div class="glb-blk"></div></div></div></div></div><div class="pb"><div class="pidx">01 — Project</div><div class="ptitle">JobApplyExpert</div><div class="pdesc">SEO-optimised WordPress site for job-seekers with blog content, XML sitemaps, and Google Search Console integration.</div><div class="pmetrics"><div><span class="pmv">100%</span><span class="pml">Mobile</span></div><div><span class="pmv">SEO</span><span class="pml">Optimised</span></div><div><span class="pmv">GSC</span><span class="pml">Connected</span></div></div><div class="pfoot"><div class="ptags"><span class="ptag">WordPress</span><span class="ptag">SEO</span><span class="ptag">Blog</span></div><a class="pvisit" href="https://jobapplyexpert.com" target="_blank">Visit Site ↗</a></div></div></div>
+    <div class="pcard"><div class="pt-wrap"><div class="pt p2"><span class="ppill">WooCommerce</span><a class="plive" href="https://shofyd.com" target="_blank"><span class="plive-dot"></span>Live ↗</a><div class="gl-browser"><div class="glb-bar"><div class="glb-d" style="background:#FF5F57"></div><div class="glb-d" style="background:#FEBC2E"></div><div class="glb-d" style="background:#28C840"></div></div><div class="glb-cyan" style="width:44%"></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:4px;"><div style="height:24px;background:rgba(255,255,255,.05);border-radius:3px;"></div><div style="height:24px;background:rgba(255,255,255,.05);border-radius:3px;"></div><div style="height:24px;background:rgba(255,255,255,.05);border-radius:3px;"></div></div><div class="glb-line" style="width:75%"></div></div></div></div><div class="pb"><div class="pidx">02 — Project</div><div class="ptitle">Shofyd</div><div class="pdesc">WooCommerce store with Google Merchant Center, Shiprocket shipping automation, and SEO-optimised product pages.</div><div class="pmetrics"><div><span class="pmv">GMC</span><span class="pml">Integrated</span></div><div><span class="pmv">Auto</span><span class="pml">Shipping</span></div><div><span class="pmv">SEO</span><span class="pml">Optimised</span></div></div><div class="pfoot"><div class="ptags"><span class="ptag">WooCommerce</span><span class="ptag">Merchant</span><span class="ptag">SEO</span></div><a class="pvisit" href="https://shofyd.com" target="_blank">Visit Site ↗</a></div></div></div>
+    <div class="pcard"><div class="pt-wrap"><div class="pt p3"><span class="ppill">Corporate</span><a class="plive" href="https://sphereglobal.com" target="_blank"><span class="plive-dot"></span>Live ↗</a><div class="gl-browser"><div class="glb-bar"><div class="glb-d" style="background:#FF5F57"></div><div class="glb-d" style="background:#FEBC2E"></div><div class="glb-d" style="background:#28C840"></div></div><div class="glb-cyan" style="width:60%"></div><div class="glb-line" style="width:90%"></div><div class="glb-line" style="width:68%"></div><div class="glb-g2"><div class="glb-blk"></div><div class="glb-blk"></div></div></div></div></div><div class="pb"><div class="pidx">03 — Project</div><div class="ptitle">Sphere Global Website</div><div class="pdesc">2-year management of corporate WordPress site for a Top AI Logistics company — delivering 30% traffic growth.</div><div class="pmetrics"><div><span class="pmv">+30%</span><span class="pml">Traffic</span></div><div><span class="pmv">2 yrs</span><span class="pml">Managed</span></div><div><span class="pmv">Fast</span><span class="pml">Speed</span></div></div><div class="pfoot"><div class="ptags"><span class="ptag">WordPress</span><span class="ptag">Tech SEO</span><span class="ptag">GA4</span></div><a class="pvisit" href="https://sphereglobal.com" target="_blank">Visit Site ↗</a></div></div></div>
+    <div class="pcard"><div class="pt-wrap"><div class="pt p5"><span class="ppill">E-Commerce</span><a class="plive" href="https://loyalmeds.in" target="_blank"><span class="plive-dot"></span>Live ↗</a><div class="gl-browser"><div class="glb-bar"><div class="glb-d" style="background:#FF5F57"></div><div class="glb-d" style="background:#FEBC2E"></div><div class="glb-d" style="background:#28C840"></div></div><div class="glb-cyan" style="width:52%"></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:4px;"><div style="height:28px;background:rgba(0,245,100,.06);border-radius:3px;"></div><div style="height:28px;background:rgba(0,245,100,.06);border-radius:3px;"></div><div style="height:28px;background:rgba(0,245,100,.06);border-radius:3px;"></div></div><div class="glb-line" style="width:80%"></div></div></div></div><div class="pb"><div class="pidx">05 — Project</div><div class="ptitle">LoyalMeds</div><div class="pdesc">Surgical & medical e-commerce store — WooCommerce-powered with product SEO, Google Merchant Center integration, and smooth checkout experience.</div><div class="pmetrics"><div><span class="pmv">Surgical</span><span class="pml">Niche</span></div><div><span class="pmv">SEO</span><span class="pml">Optimised</span></div><div><span class="pmv">GMC</span><span class="pml">Ready</span></div></div><div class="pfoot"><div class="ptags"><span class="ptag">WooCommerce</span><span class="ptag">Medical</span><span class="ptag">SEO</span></div><a class="pvisit" href="https://loyalmeds.in" target="_blank">Visit Site ↗</a></div></div></div>
+    <div class="pcard"><div class="pt-wrap"><div class="pt p6"><span class="ppill">Hospitality</span><a class="plive" href="https://myguesthouse.in" target="_blank"><span class="plive-dot"></span>Live ↗</a><div class="gl-browser"><div class="glb-bar"><div class="glb-d" style="background:#FF5F57"></div><div class="glb-d" style="background:#FEBC2E"></div><div class="glb-d" style="background:#28C840"></div></div><div class="glb-cyan" style="width:68%"></div><div class="glb-line" style="width:90%"></div><div class="glb-line" style="width:60%"></div><div class="glb-g2"><div class="glb-blk"></div><div class="glb-blk"></div></div></div></div></div><div class="pb"><div class="pidx">06 — Project</div><div class="ptitle">MyGuestHouse</div><div class="pdesc">Hotel & guesthouse booking website with room listings, availability display, SEO-optimised local search presence, and contact booking flow.</div><div class="pmetrics"><div><span class="pmv">Local</span><span class="pml">SEO</span></div><div><span class="pmv">Booking</span><span class="pml">Ready</span></div><div><span class="pmv">Mobile</span><span class="pml">First</span></div></div><div class="pfoot"><div class="ptags"><span class="ptag">WordPress</span><span class="ptag">Hospitality</span><span class="ptag">Local SEO</span></div><a class="pvisit" href="https://myguesthouse.in" target="_blank">Visit Site ↗</a></div></div></div>
+    <div class="pcard"><div class="pt-wrap"><div class="pt p4"><span class="ppill">B2B Campaign</span><a class="plive" href="https://www.linkedin.com/in/manishv-97a1b9210" target="_blank"><span class="plive-dot"></span>LinkedIn ↗</a><div class="gl-browser"><div class="glb-bar"><div class="glb-d" style="background:#FF5F57"></div><div class="glb-d" style="background:#FEBC2E"></div><div class="glb-d" style="background:#28C840"></div></div><div style="display:flex;flex-direction:column;gap:6px;margin-top:2px;"><div style="display:flex;align-items:center;gap:6px;"><div style="width:10px;height:10px;border-radius:50%;background:rgba(0,245,255,0.4);flex-shrink:0;"></div><div style="flex:1;height:3px;background:rgba(0,245,255,0.15);border-radius:2px;"></div><div style="width:20px;height:3px;background:rgba(0,245,255,0.4);border-radius:2px;"></div></div><div style="display:flex;align-items:center;gap:6px;"><div style="width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.07);flex-shrink:0;"></div><div style="flex:1;height:3px;background:rgba(255,255,255,0.06);border-radius:2px;"></div><div style="width:30px;height:3px;background:rgba(0,245,255,0.2);border-radius:2px;"></div></div><div style="display:flex;align-items:center;gap:6px;"><div style="width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.05);flex-shrink:0;"></div><div style="flex:1;height:3px;background:rgba(255,255,255,0.06);border-radius:2px;"></div><div style="width:14px;height:3px;background:rgba(0,245,255,0.15);border-radius:2px;"></div></div></div></div></div></div><div class="pb"><div class="pidx">04 — Project</div><div class="ptitle">LinkedIn B2B Lead System</div><div class="pdesc">End-to-end outreach — Sponsored Messages, ZoomInfo prospects, Outreach.io automation. 50+ qualified B2B leads generated.</div><div class="pmetrics"><div><span class="pmv">50+</span><span class="pml">Leads</span></div><div><span class="pmv">ICP</span><span class="pml">Targeted</span></div><div><span class="pmv">Auto</span><span class="pml">Sequences</span></div></div><div class="pfoot"><div class="ptags"><span class="ptag">LinkedIn Ads</span><span class="ptag">ZoomInfo</span><span class="ptag">Outreach.io</span></div><a class="pvisit" href="https://www.linkedin.com/in/manishv-97a1b9210" target="_blank">View Profile ↗</a></div></div></div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="sec" id="process">
+  <div class="sec-label"><span class="sl-text">Method</span><div class="sl-line"></div></div>
+  <h2 class="sh fade-up">How I<br><em>work.</em></h2>
+  <div class="proc-grid fade-up">
+    <div class="ps"><div class="ps-n">01</div><div class="ps-icon">🔍</div><div class="ps-title">Audit & Research</div><div class="ps-desc">SEO audit, competitor analysis, keyword research, audience profiling — finding the biggest growth opportunities in your niche.</div></div>
+    <div class="ps"><div class="ps-n">02</div><div class="ps-icon">🗺️</div><div class="ps-title">Strategy & Planning</div><div class="ps-desc">Data-backed roadmap with KPIs, channel priorities, content calendar, budgets, and timelines tied to your business goals.</div></div>
+    <div class="ps"><div class="ps-n">03</div><div class="ps-icon">⚙️</div><div class="ps-title">Execute & Optimise</div><div class="ps-desc">Launch, A/B test, iterate fast. AI tools accelerate execution while real-time data drives every decision.</div></div>
+    <div class="ps"><div class="ps-n">04</div><div class="ps-icon">📈</div><div class="ps-title">Report & Scale</div><div class="ps-desc">Transparent ROI reporting. Double down on winners, cut losers, scale the best-performing channels aggressively.</div></div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section class="sec sec-alt" id="skills">
+  <div class="sec-label"><span class="sl-text">Capabilities</span><div class="sl-line"></div></div>
+  <h2 class="sh fade-up">Skills &<br><em>tools.</em></h2>
+  <div class="skills-grid">
+    <div class="fade-up">
+      <div class="sk-cat">SEO & Organic Growth</div>
+      <div class="sk-bars">
+        <div><div class="sb-row"><span class="sb-name">On / Off-Page SEO</span><span class="sb-pct">92%</span></div><div class="sb-track"><div class="sb-fill" data-w="92"></div></div></div>
+        <div><div class="sb-row"><span class="sb-name">Keyword Research</span><span class="sb-pct">88%</span></div><div class="sb-track"><div class="sb-fill" data-w="88"></div></div></div>
+        <div><div class="sb-row"><span class="sb-name">Technical SEO</span><span class="sb-pct">82%</span></div><div class="sb-track"><div class="sb-fill" data-w="82"></div></div></div>
+        <div><div class="sb-row"><span class="sb-name">Backlinking</span><span class="sb-pct">86%</span></div><div class="sb-track"><div class="sb-fill" data-w="86"></div></div></div>
+      </div>
+      <div class="sk-cat">Paid Advertising</div>
+      <div class="sk-bars">
+        <div><div class="sb-row"><span class="sb-name">Google Ads / SEM</span><span class="sb-pct">85%</span></div><div class="sb-track"><div class="sb-fill" data-w="85"></div></div></div>
+        <div><div class="sb-row"><span class="sb-name">LinkedIn Ads</span><span class="sb-pct">90%</span></div><div class="sb-track"><div class="sb-fill" data-w="90"></div></div></div>
+        <div><div class="sb-row"><span class="sb-name">Meta Ads / SMM</span><span class="sb-pct">80%</span></div><div class="sb-track"><div class="sb-fill" data-w="80"></div></div></div>
+      </div>
+      <div class="sk-cat">Web & Content</div>
+      <div class="sk-bars">
+        <div><div class="sb-row"><span class="sb-name">WordPress</span><span class="sb-pct">92%</span></div><div class="sb-track"><div class="sb-fill" data-w="92"></div></div></div>
+        <div><div class="sb-row"><span class="sb-name">WooCommerce</span><span class="sb-pct">85%</span></div><div class="sb-track"><div class="sb-fill" data-w="85"></div></div></div>
+        <div><div class="sb-row"><span class="sb-name">Email Marketing</span><span class="sb-pct">86%</span></div><div class="sb-track"><div class="sb-fill" data-w="86"></div></div></div>
+        <div><div class="sb-row"><span class="sb-name">AI Content (ChatGPT/Gemini)</span><span class="sb-pct">90%</span></div><div class="sb-track"><div class="sb-fill" data-w="90"></div></div></div>
+      </div>
+    </div>
+  </div><!-- close skills-grid -->
+</section>
+
+<!-- ═══════════════════════════════
+     3D TOOLS SHOWCASE SECTION
+═══════════════════════════════ -->
+<section class="sec" id="tools-3d" style="border-bottom:1px solid var(--bdr);padding-bottom:0;">
+  <div class="sec-label"><span class="sl-text">Arsenal</span><div class="sl-line"></div></div>
+  <h2 class="sh fade-up">My 3D<br><em>tool stack.</em></h2>
+  <p style="font-size:15px;color:var(--text2);margin-bottom:48px;max-width:520px;" class="fade-up">Every tool I use daily — hover to explore. Grouped by category, powered by experience.</p>
+
+  <!-- Category filters -->
+  <div class="tool-filters fade-up" id="toolFilters">
+    <button class="tf active" data-cat="all" onclick="filterTools('all',this)">All Tools</button>
+    <button class="tf" data-cat="analytics" onclick="filterTools('analytics',this)">Analytics</button>
+    <button class="tf" data-cat="ads" onclick="filterTools('ads',this)">Paid Ads</button>
+    <button class="tf" data-cat="seo" onclick="filterTools('seo',this)">SEO</button>
+    <button class="tf" data-cat="web" onclick="filterTools('web',this)">Web & Design</button>
+    <button class="tf" data-cat="outreach" onclick="filterTools('outreach',this)">Outreach</button>
+    <button class="tf" data-cat="ai" onclick="filterTools('ai',this)">AI</button>
+  </div>
+
+  <!-- 3D Canvas -->
+  <div style="position:relative;width:100%;height:480px;margin:0 -48px;width:calc(100% + 96px);" id="toolsCanvasWrap">
+    <canvas id="tools-canvas" style="width:100%;height:100%;display:block;"></canvas>
+    <!-- Tooltip -->
+    <div id="tool-tooltip" style="position:absolute;pointer-events:none;opacity:0;transition:opacity .2s;z-index:10;">
+      <div style="background:rgba(8,8,16,0.95);border:1px solid rgba(0,245,255,0.35);border-radius:10px;padding:12px 18px;backdrop-filter:blur(16px);box-shadow:0 8px 32px rgba(0,245,255,0.15);min-width:140px;">
+        <div id="tt-icon" style="font-size:28px;text-align:center;margin-bottom:6px;"></div>
+        <div id="tt-name" style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:#F0F0FF;text-align:center;margin-bottom:3px;"></div>
+        <div id="tt-cat" style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#00F5FF;text-align:center;margin-bottom:6px;"></div>
+        <div id="tt-bar-wrap" style="height:2px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden;">
+          <div id="tt-bar" style="height:100%;background:linear-gradient(90deg,#00F5FF,#7B5CF5);border-radius:2px;transition:width .4s;"></div>
+        </div>
+        <div id="tt-level" style="font-size:10px;color:#505070;text-align:right;margin-top:4px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tool cards grid below canvas -->
+  <div class="t3d-grid" id="toolsGrid" style="padding:48px 0 72px;">
+  </div>
+</section>
+
+<style>
+.tool-filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:32px;}
+.tf{padding:8px 18px;background:transparent;border:1px solid var(--bdr);border-radius:20px;font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);cursor:pointer;transition:all .25s;}
+.tf:hover{border-color:var(--bdr2);color:var(--cyan);}
+.tf.active{background:rgba(0,245,255,0.1);border-color:var(--bdr2);color:var(--cyan);box-shadow:0 0 16px rgba(0,245,255,0.1);}
+.t3d-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+@media(min-width:600px){.t3d-grid{grid-template-columns:repeat(4,1fr);}}
+@media(min-width:900px){.t3d-grid{grid-template-columns:repeat(6,1fr);}}
+.t3d-card{
+  padding:20px 12px;text-align:center;
+  background:var(--bg2);border:1px solid var(--bdr);border-radius:12px;
+  cursor:default;transition:all .35s var(--ease);
+  position:relative;overflow:hidden;
+  transform-style:preserve-3d;
+}
+.t3d-card::before{content:'';position:absolute;inset:0;border-radius:12px;background:linear-gradient(135deg,rgba(0,245,255,0.06),rgba(123,92,245,0.04));opacity:0;transition:opacity .3s;}
+.t3d-card:hover{border-color:var(--bdr2);box-shadow:0 12px 36px rgba(0,245,255,0.12);transform:translateY(-4px) scale(1.03);}
+.t3d-card:hover::before{opacity:1;}
+.t3d-card.hidden{opacity:0;transform:scale(0.85);pointer-events:none;height:0;padding:0;margin:0;border:none;overflow:hidden;}
+.t3d-icon{font-size:28px;margin-bottom:8px;display:block;transition:transform .3s var(--ease);}
+.t3d-card:hover .t3d-icon{transform:scale(1.2) translateY(-2px);}
+.t3d-name{font-size:11px;font-weight:600;color:var(--text2);margin-bottom:5px;letter-spacing:.3px;}
+.t3d-cat-dot{width:5px;height:5px;border-radius:50%;margin:0 auto 5px;}
+.t3d-level{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:6px;}
+.t3d-bar{height:2px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden;}
+.t3d-fill{height:100%;border-radius:2px;width:0;transition:width 1.4s var(--ease);}
+.t3d-card.vis .t3d-fill{width:var(--w);}
+</style>
+
+<script>
+/* ══ TOOLS DATA ══ */
+const TOOLS = [
+  /* ── Analytics ── */
+  {name:'Google Search Console',short:'GSC',icon:'🔎',cat:'analytics',color:'#4285F4',level:'Expert',pct:95},
+  {name:'Google Analytics 4',short:'GA4',icon:'📊',cat:'analytics',color:'#E37400',level:'Expert',pct:93},
+  {name:'Google Tag Manager',short:'GTM',icon:'🏷️',cat:'analytics',color:'#4285F4',level:'Advanced',pct:82},
+  /* ── SEO ── */
+  {name:'SEMrush',short:'SEMrush',icon:'📡',cat:'seo',color:'#FF6D00',level:'Expert',pct:92},
+  {name:'Moz',short:'Moz',icon:'🔍',cat:'seo',color:'#00A5BD',level:'Advanced',pct:80},
+  {name:'Ahrefs',short:'Ahrefs',icon:'⚓',cat:'seo',color:'#FF6B35',level:'Advanced',pct:83},
+  /* ── Paid Ads ── */
+  {name:'Google Merchant Center',short:'Merchant',icon:'🛒',cat:'ads',color:'#34A853',level:'Expert',pct:90},
+  {name:'Google Ads',short:'Google Ads',icon:'💚',cat:'ads',color:'#4285F4',level:'Advanced',pct:85},
+  {name:'Meta Ads',short:'Meta Ads',icon:'🔵',cat:'ads',color:'#1877F2',level:'Advanced',pct:82},
+  {name:'LinkedIn Ads',short:'LinkedIn Ads',icon:'💼',cat:'ads',color:'#0A66C2',level:'Expert',pct:90},
+  {name:'Reddit Ads',short:'Reddit Ads',icon:'🟠',cat:'ads',color:'#FF4500',level:'Intermediate',pct:68},
+  /* ── Outreach & CRM ── */
+  {name:'ZoomInfo',short:'ZoomInfo',icon:'🗄️',cat:'outreach',color:'#00C2FF',level:'Advanced',pct:85},
+  {name:'Outreach.io',short:'Outreach',icon:'📮',cat:'outreach',color:'#5951FF',level:'Advanced',pct:83},
+  {name:'Mailchimp',short:'Mailchimp',icon:'✉️',cat:'outreach',color:'#FFE01B',level:'Advanced',pct:80},
+  {name:'HubSpot',short:'HubSpot',icon:'🧡',cat:'outreach',color:'#FF7A59',level:'Intermediate',pct:72},
+  /* ── Web & Design ── */
+  {name:'WordPress',short:'WordPress',icon:'🌐',cat:'web',color:'#21759B',level:'Expert',pct:94},
+  {name:'WooCommerce',short:'WooCommerce',icon:'🛍️',cat:'web',color:'#96588A',level:'Expert',pct:91},
+  {name:'Canva',short:'Canva',icon:'🎨',cat:'web',color:'#00C4CC',level:'Expert',pct:92},
+  /* ── AI Tools ── */
+  {name:'ChatGPT',short:'ChatGPT',icon:'🤖',cat:'ai',color:'#74AA9C',level:'Expert',pct:95},
+  {name:'Gemini AI',short:'Gemini',icon:'✨',cat:'ai',color:'#4285F4',level:'Expert',pct:90},
+  {name:'Claude AI',short:'Claude',icon:'🧠',cat:'ai',color:'#C9963A',level:'Advanced',pct:88},
+  {name:'Midjourney',short:'Midjourney',icon:'🎭',cat:'ai',color:'#FF2D55',level:'Advanced',pct:78},
+  {name:'Perplexity AI',short:'Perplexity',icon:'🌀',cat:'ai',color:'#20B2AA',level:'Advanced',pct:82},
+  {name:'Jasper AI',short:'Jasper',icon:'⚡',cat:'ai',color:'#8B5CF6',level:'Intermediate',pct:75},
+  {name:'Surfer SEO',short:'Surfer',icon:'🏄',cat:'ai',color:'#06B6D4',level:'Advanced',pct:80},
+  {name:'Copy.ai',short:'Copy.ai',icon:'✍️',cat:'ai',color:'#7C3AED',level:'Advanced',pct:77},
+];
+
+const CAT_COLORS = {
+  analytics:'#00F5FF', ads:'#F542A8', seo:'#7B5CF5',
+  web:'#00FF94', outreach:'#FFB800', ai:'#FF6B6B'
+};
+
+/* Build card grid */
+function buildToolCards(){
+  const grid = document.getElementById('toolsGrid');
+  grid.innerHTML = '';
+  TOOLS.forEach((t,i)=>{
+    const c = CAT_COLORS[t.cat]||'#00F5FF';
+    grid.innerHTML += `
+    <div class="t3d-card fade-up" data-cat="${t.cat}" style="transition-delay:${i*0.04}s" 
+      onmousemove="tiltCard(this,event)" onmouseleave="resetCard(this)">
+      <span class="t3d-icon">${t.icon}</span>
+      <div class="t3d-name">${t.short}</div>
+      <div class="t3d-cat-dot" style="background:${c};box-shadow:0 0 6px ${c};"></div>
+      <div class="t3d-level">${t.level}</div>
+      <div class="t3d-bar"><div class="t3d-fill" style="--w:${t.pct}%;background:linear-gradient(90deg,${c},var(--violet));"></div></div>
+    </div>`;
+  });
+  /* Re-observe for skill bar animations */
+  document.querySelectorAll('.t3d-card').forEach(el=>io2.observe(el));
+}
+
+const io2 = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});
+},{threshold:0.1});
+
+function filterTools(cat, btn){
+  document.querySelectorAll('.tf').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.t3d-card').forEach(c=>{
+    const match = cat==='all' || c.dataset.cat===cat;
+    c.classList.toggle('hidden',!match);
+  });
+  /* re-filter 3D canvas nodes */
+  if(window.filterCanvas) window.filterCanvas(cat);
+}
+
+function tiltCard(el,e){
+  const r=el.getBoundingClientRect();
+  const x=(e.clientX-r.left)/r.width-.5;
+  const y=(e.clientY-r.top)/r.height-.5;
+  el.style.transform=`perspective(500px) rotateY(${x*20}deg) rotateX(${-y*14}deg) translateY(-4px) scale(1.03)`;
+}
+function resetCard(el){el.style.transform='';}
+
+buildToolCards();
+
+/* ══ 3D CANVAS — floating tool spheres ══ */
+(function(){
+  const canvas = document.getElementById('tools-canvas');
+  const wrap = document.getElementById('toolsCanvasWrap');
+  const W = ()=>wrap.offsetWidth, H = ()=>480;
+  const renderer = new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer.setSize(W(),H());
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(55,W()/H(),0.1,100);
+  camera.position.z = 10;
+
+  /* Lights */
+  scene.add(new THREE.AmbientLight(0x00F5FF,0.4));
+  const pl1=new THREE.PointLight(0x00F5FF,3,25);pl1.position.set(6,4,4);scene.add(pl1);
+  const pl2=new THREE.PointLight(0x7B5CF5,2,20);pl2.position.set(-6,-3,3);scene.add(pl2);
+  const pl3=new THREE.PointLight(0xF542A8,1.5,18);pl3.position.set(0,6,2);scene.add(pl3);
+
+  /* Central orbital rings */
+  const ringGeo1 = new THREE.TorusGeometry(4.5,0.025,16,120);
+  const ringGeo2 = new THREE.TorusGeometry(3.0,0.02,16,100);
+  const ringGeo3 = new THREE.TorusGeometry(6.0,0.02,16,140);
+  const rMat1 = new THREE.MeshBasicMaterial({color:0x00F5FF,transparent:true,opacity:0.25});
+  const rMat2 = new THREE.MeshBasicMaterial({color:0x7B5CF5,transparent:true,opacity:0.2});
+  const rMat3 = new THREE.MeshBasicMaterial({color:0xF542A8,transparent:true,opacity:0.12});
+  const ring1=new THREE.Mesh(ringGeo1,rMat1);ring1.rotation.x=Math.PI/2.5;scene.add(ring1);
+  const ring2=new THREE.Mesh(ringGeo2,rMat2);ring2.rotation.x=Math.PI/3;ring2.rotation.y=Math.PI/4;scene.add(ring2);
+  const ring3=new THREE.Mesh(ringGeo3,rMat3);ring3.rotation.x=Math.PI/1.8;ring3.rotation.z=Math.PI/6;scene.add(ring3);
+
+  /* Central icosahedron */
+  const coreGeo=new THREE.IcosahedronGeometry(0.9,1);
+  const coreMat=new THREE.MeshPhongMaterial({color:0x00F5FF,transparent:true,opacity:0.12,shininess:300,specular:0x00F5FF,wireframe:false});
+  const coreWire=new THREE.MeshBasicMaterial({color:0x00F5FF,wireframe:true,transparent:true,opacity:0.3});
+  scene.add(new THREE.Mesh(coreGeo,coreMat));
+  scene.add(new THREE.Mesh(coreGeo,coreWire));
+
+  /* Tool node spheres */
+  const nodes=[];
+  const catColorMap={analytics:0x00F5FF,ads:0xF542A8,seo:0x7B5CF5,web:0x00FF94,outreach:0xFFB800,ai:0xFF6B6B};
+  const goldenRatio=1.618033988749895;
+
+  TOOLS.forEach((t,i)=>{
+    const phi=Math.acos(1-(2*i+1)/TOOLS.length);
+    const theta=2*Math.PI*i/goldenRatio;
+    const r=4.2+(t.pct/100)*1.2; /* bigger tools orbit further — weight by proficiency */
+    const x=r*Math.sin(phi)*Math.cos(theta);
+    const y=r*Math.sin(phi)*Math.sin(theta)*0.55;
+    const z=r*Math.cos(phi)*0.7;
+
+    const col=catColorMap[t.cat]||0x00F5FF;
+    const size=0.12+((t.pct-60)/100)*0.18; /* size = proficiency weight */
+    const geo=new THREE.SphereGeometry(size,16,16);
+    const mat=new THREE.MeshPhongMaterial({color:col,transparent:true,opacity:0.85,shininess:200,specular:col,emissive:col,emissiveIntensity:0.25});
+    const mesh=new THREE.Mesh(geo,mat);
+    mesh.position.set(x,y,z);
+    mesh.userData={tool:t,origX:x,origY:y,origZ:z,col};
+    scene.add(mesh);
+
+    /* Glow halo */
+    const hGeo=new THREE.SphereGeometry(size*2.2,16,16);
+    const hMat=new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:0.04,side:THREE.BackSide});
+    const halo=new THREE.Mesh(hGeo,hMat);
+    halo.position.set(x,y,z);
+    scene.add(halo);
+
+    /* Connection line to core */
+    const lGeo=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,0),new THREE.Vector3(x,y,z)]);
+    const lMat=new THREE.LineBasicMaterial({color:col,transparent:true,opacity:0.06});
+    scene.add(new THREE.Line(lGeo,lMat));
+
+    nodes.push({mesh,halo,mat,hMat,t,size,origX:x,origY:y,origZ:z,phase:Math.random()*Math.PI*2});
+  });
+
+  /* Raycaster for hover */
+  const raycaster=new THREE.Raycaster();
+  const mouse=new THREE.Vector2(-999,-999);
+  let hoveredNode=null;
+
+  canvas.addEventListener('mousemove',e=>{
+    const rect=canvas.getBoundingClientRect();
+    mouse.x=((e.clientX-rect.left)/rect.width)*2-1;
+    mouse.y=-((e.clientY-rect.top)/rect.height)*2+1;
+
+    raycaster.setFromCamera(mouse,camera);
+    const hits=raycaster.intersectObjects(nodes.map(n=>n.mesh));
+    const tt=document.getElementById('tool-tooltip');
+
+    if(hits.length>0){
+      const hit=hits[0];
+      const nd=nodes.find(n=>n.mesh===hit.object);
+      if(nd){
+        hoveredNode=nd;
+        nd.mat.emissiveIntensity=0.7;
+        nd.mat.opacity=1;
+        nd.mesh.scale.setScalar(1.8);
+
+        /* Position tooltip */
+        const pos=hit.object.position.clone().project(camera);
+        const tx=(pos.x+1)/2*rect.width+rect.left-canvas.getBoundingClientRect().left;
+        const ty=(-pos.y+1)/2*rect.height;
+        tt.style.left=(tx-70)+'px';
+        tt.style.top=(ty+20)+'px';
+        tt.style.opacity='1';
+        document.getElementById('tt-icon').textContent=nd.t.icon;
+        document.getElementById('tt-name').textContent=nd.t.name;
+        document.getElementById('tt-cat').textContent=nd.t.cat;
+        document.getElementById('tt-bar').style.width=nd.t.pct+'%';
+        document.getElementById('tt-level').textContent=nd.t.level+' · '+nd.t.pct+'%';
+      }
+      canvas.style.cursor='pointer';
+    } else {
+      if(hoveredNode){
+        hoveredNode.mat.emissiveIntensity=0.25;
+        hoveredNode.mat.opacity=0.85;
+        hoveredNode.mesh.scale.setScalar(1);
+        hoveredNode=null;
+      }
+      tt.style.opacity='0';
+      canvas.style.cursor='default';
+    }
+  });
+
+  canvas.addEventListener('mouseleave',()=>{
+    document.getElementById('tool-tooltip').style.opacity='0';
+    if(hoveredNode){hoveredNode.mat.emissiveIntensity=0.25;hoveredNode.mat.opacity=0.85;hoveredNode.mesh.scale.setScalar(1);hoveredNode=null;}
+  });
+
+  /* Filter canvas */
+  let activeFilter='all';
+  window.filterCanvas=function(cat){
+    activeFilter=cat;
+    nodes.forEach(n=>{
+      const show=cat==='all'||n.t.cat===cat;
+      n.mesh.visible=show;
+      n.halo.visible=show;
+    });
+  };
+
+  /* Mouse parallax */
+  let pmx=0,pmy=0;
+  document.addEventListener('mousemove',e=>{pmx=(e.clientX/window.innerWidth-.5)*1.2;pmy=(e.clientY/window.innerHeight-.5)*0.8;});
+
+  /* Resize */
+  window.addEventListener('resize',()=>{
+    renderer.setSize(W(),H());
+    camera.aspect=W()/H();
+    camera.updateProjectionMatrix();
+  });
+
+  let t2=0;
+  function animate(){
+    requestAnimationFrame(animate);
+    t2+=0.006;
+
+    /* Rotate rings */
+    ring1.rotation.z+=0.003;
+    ring2.rotation.y+=0.004;
+    ring3.rotation.x+=0.002;
+
+    /* Float nodes */
+    nodes.forEach(n=>{
+      n.mesh.position.y=n.origY+Math.sin(t2+n.phase)*0.18;
+      n.halo.position.y=n.origY+Math.sin(t2+n.phase)*0.18;
+      n.mesh.rotation.y+=0.01;
+    });
+
+    /* Gentle orbit of whole scene */
+    scene.rotation.y=t2*0.08+pmx*0.15;
+    scene.rotation.x=pmy*0.08;
+
+    renderer.render(scene,camera);
+  }
+  animate();
+})();
+</script>
+
+<!-- SERVICES -->
+<section class="sec" id="services">
+  <div class="sec-label"><span class="sl-text">Services</span><div class="sl-line"></div></div>
+  <h2 class="sh fade-up">What I can<br><em>do for you.</em></h2>
+  <div class="sv-grid">
+    <div class="sv fade-up"><div class="sv-icon">🔍</div><div class="sv-title">SEO & Organic Growth</div><div class="sv-desc">Full-spectrum SEO building sustainable traffic that compounds month over month.</div><ul class="sv-list"><li>On-page & off-page optimisation</li><li>Keyword research & content strategy</li><li>Technical SEO audits & fixes</li><li>Backlink building & outreach</li><li>GA4 & GSC monthly reporting</li></ul></div>
+    <div class="sv fade-up" style="transition-delay:.06s"><div class="sv-icon">💰</div><div class="sv-title">Paid Advertising</div><div class="sv-desc">Data-driven campaigns on Google, Meta, and LinkedIn to maximise ROAS and lead quality.</div><ul class="sv-list"><li>Google Search & Display campaigns</li><li>Meta (Facebook / Instagram) ads</li><li>LinkedIn Sponsored Ads & Messages</li><li>Campaign strategy & budget planning</li><li>A/B testing & optimisation</li></ul></div>
+    <div class="sv fade-up" style="transition-delay:.12s"><div class="sv-icon">🌐</div><div class="sv-title">WordPress Development</div><div class="sv-desc">Fast, conversion-optimised WP & WooCommerce sites with Google Merchant Center integration.</div><ul class="sv-list"><li>WordPress website design & build</li><li>WooCommerce e-commerce stores</li><li>Google Merchant Center setup</li><li>Speed & performance optimisation</li><li>Ongoing management & care</li></ul></div>
+    <div class="sv fade-up" style="transition-delay:.18s"><div class="sv-icon">✉️</div><div class="sv-title">Email Marketing</div><div class="sv-desc">Complete funnels converting cold prospects into customers through smart automation.</div><ul class="sv-list"><li>Funnel strategy & campaign design</li><li>Drip sequence automation</li><li>List segmentation & management</li><li>Copywriting & creative design</li><li>Open rate & conversion optimisation</li></ul></div>
+    <div class="sv fade-up" style="transition-delay:.24s"><div class="sv-icon">🎯</div><div class="sv-title">B2B Lead Generation</div><div class="sv-desc">Targeted outreach to fill your pipeline with qualified, sales-ready prospects.</div><ul class="sv-list"><li>ICP definition & prospect research</li><li>LinkedIn Sponsored campaigns</li><li>ZoomInfo & Outreach.io sequences</li><li>Lead scoring & qualification</li><li>CRM integration & follow-ups</li></ul></div>
+    <div class="sv fade-up" style="transition-delay:.30s"><div class="sv-icon">🤖</div><div class="sv-title">AI-Powered Marketing</div><div class="sv-desc">Leverage AI to produce better content faster and outpace your competition.</div><ul class="sv-list"><li>AI-assisted SEO content creation</li><li>ChatGPT & Gemini campaign copy</li><li>Automated reporting & insights</li><li>Prompt engineering for marketing</li><li>AI workflow integration</li></ul></div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section class="sec sec-alt" id="education">
+  <div class="sec-label"><span class="sl-text">Education</span><div class="sl-line"></div></div>
+  <h2 class="sh fade-up">Academic<br><em>background.</em></h2>
+  <div class="edu-grid fade-up">
+    <div class="edu-card"><div class="edu-y">2020 — 2023</div><div class="edu-d">BBA — Business Administration & Management</div><div class="edu-s">REVA University</div><div class="edu-l">Bangalore, Karnataka</div><span class="edu-tag">Industry Integrated</span></div>
+    <div class="edu-card"><div class="edu-y">May 2018 — Mar 2020</div><div class="edu-d">Intermediate Education</div><div class="edu-s">Sri Chaitanya Junior College</div><div class="edu-l">Hyderabad, Telangana</div><span class="edu-tag">Secondary Education</span></div>
+  </div>
+  <div class="iit-card fade-up">
+    <div class="iit-icon">🏛️</div>
+    <div><div class="iit-y">Sep 2022 — Jan 2023</div><div class="iit-t">Mood Indigo — IIT Bombay</div><div class="iit-d">Team Member at Asia's largest college cultural festival — national-scale event marketing and brand communication alongside IIT Bombay students.</div></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="sec" id="contact">
+  <div class="ct-inner">
+    <div class="sec-label" style="justify-content:center;"><span class="sl-text">Get in Touch</span></div>
+    <h2 class="sh fade-up" style="text-align:center;margin-bottom:16px;">Ready to grow<br><em>together?</em></h2>
+    <p class="ct-para fade-up">Whether you need SEO that compounds, paid campaigns that convert, a WooCommerce store that ranks, or AI-powered content at scale — I'm ready.</p>
+    <div class="fade-up"><span class="ct-email" onclick="copyText('manishvanga1111@gmail.com')"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0c616d62657f647a6d626b6d3d3d3d3d4c6b616d6560226f6361">[email&#160;protected]</a> ↗</span></div>
+    <div class="ct-btns fade-up">
+      <button class="ct-btn" onclick="openModal('contactModal')">✉ Send Message</button>
+      <button class="ct-btn" onclick="openModal('resumeModal')">📄 Resume</button>
+      <button class="ct-btn" onclick="copyText('+918143557336')">📞 +91-8143557336</button>
+      <button class="ct-btn" onclick="window.open('https://www.linkedin.com/in/manishv-97a1b9210','_blank')">💼 LinkedIn</button>
+    </div>
+    <div class="avail fade-up"><span class="av-dot"></span>Available for freelance & full-time — Hyderabad & Remote</div>
+  </div>
+</section>
+
+<footer>
+  <div class="fl">© 2025 Manish Vanga — Digital Marketing Executive</div>
+  <div class="fr">Hyderabad, Telangana · India</div>
+</footer>
+<div id="toast"></div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+/* ══ THREE.JS 3D HERO ══ */
+(function(){
+  const canvas = document.getElementById('three-canvas');
+  const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 100);
+  camera.position.z = 6;
+
+  /* Lighting */
+  const aLight = new THREE.AmbientLight(0x00F5FF, 0.3);
+  scene.add(aLight);
+  const pLight1 = new THREE.PointLight(0x00F5FF, 2, 20);
+  pLight1.position.set(5, 5, 5);
+  scene.add(pLight1);
+  const pLight2 = new THREE.PointLight(0x7B5CF5, 1.5, 20);
+  pLight2.position.set(-5, -3, 3);
+  scene.add(pLight2);
+  const pLight3 = new THREE.PointLight(0xF542A8, 1, 15);
+  pLight3.position.set(0, -5, 2);
+  scene.add(pLight3);
+
+  /* Materials */
+  const matWire = new THREE.MeshBasicMaterial({color:0x00F5FF, wireframe:true, transparent:true, opacity:0.12});
+  const matGlass = new THREE.MeshPhongMaterial({color:0x00F5FF, transparent:true, opacity:0.08, shininess:200, specular:0x00F5FF});
+  const matViolet = new THREE.MeshPhongMaterial({color:0x7B5CF5, transparent:true, opacity:0.1, shininess:150, specular:0x7B5CF5});
+  const matPink = new THREE.MeshPhongMaterial({color:0xF542A8, transparent:true, opacity:0.08, shininess:150, specular:0xF542A8});
+  const matEdge = new THREE.MeshBasicMaterial({color:0x00F5FF, transparent:true, opacity:0.4});
+
+  /* Objects */
+  const objects = [];
+
+  function addObj(geo, mat, x, y, z, rx, ry, rz, sx, sy, sz){
+    const m = new THREE.Mesh(geo, mat);
+    m.position.set(x,y,z);
+    m.rotation.set(rx,ry,rz);
+    m.scale.set(sx||1,sy||1,sz||1);
+    scene.add(m);
+    return m;
+  }
+
+  /* Icosahedron - main */
+  const icoGeo = new THREE.IcosahedronGeometry(1.4, 1);
+  const icoWire = addObj(icoGeo, matWire, 3.5, 0.5, -1, 0.3, 0.5, 0);
+  const icoSolid = addObj(icoGeo, matGlass, 3.5, 0.5, -1, 0.3, 0.5, 0);
+  objects.push({m:icoWire, rx:.003, ry:.005, rz:.002});
+  objects.push({m:icoSolid, rx:.003, ry:.005, rz:.002});
+
+  /* Torus */
+  const toroGeo = new THREE.TorusGeometry(1.0, 0.06, 16, 80);
+  const toro = addObj(toroGeo, matEdge, 3.5, 0.5, -1, Math.PI/2, 0.3, 0);
+  objects.push({m:toro, rx:.002, ry:.006, rz:.001});
+
+  /* Octahedron */
+  const octGeo = new THREE.OctahedronGeometry(0.8, 0);
+  const oct = addObj(octGeo, matViolet, -3.8, 1.5, -2, 0.5, 0.3, 0.2);
+  const octW = addObj(octGeo, new THREE.MeshBasicMaterial({color:0x7B5CF5, wireframe:true, transparent:true, opacity:0.2}), -3.8, 1.5, -2, 0.5, 0.3, 0.2);
+  objects.push({m:oct, rx:.004, ry:.003, rz:.005});
+  objects.push({m:octW, rx:.004, ry:.003, rz:.005});
+
+  /* Small torus knot */
+  const knotGeo = new THREE.TorusKnotGeometry(0.5, 0.12, 80, 12);
+  const knot = addObj(knotGeo, matPink, -3, -2.5, -1.5, 0.5, 0.3, 0);
+  objects.push({m:knot, rx:.005, ry:.008, rz:.003});
+
+  /* Dodecahedron */
+  const dodGeo = new THREE.DodecahedronGeometry(0.6, 0);
+  const dod = addObj(dodGeo, new THREE.MeshBasicMaterial({color:0xF542A8, wireframe:true, transparent:true, opacity:0.25}), 2.5, -2.5, -2, 0.2, 0.4, 0.1);
+  objects.push({m:dod, rx:.006, ry:.004, rz:.007});
+
+  /* Particles */
+  const pGeo = new THREE.BufferGeometry();
+  const pCount = 1200;
+  const pPos = new Float32Array(pCount * 3);
+  for(let i=0;i<pCount*3;i++) pPos[i] = (Math.random()-0.5)*20;
+  pGeo.setAttribute('position', new THREE.BufferAttribute(pPos,3));
+  const pMat = new THREE.PointsMaterial({color:0x00F5FF, size:0.025, transparent:true, opacity:0.5});
+  scene.add(new THREE.Points(pGeo, pMat));
+
+  /* Mouse parallax */
+  let mx=0, my=0;
+  document.addEventListener('mousemove', e=>{
+    mx = (e.clientX/window.innerWidth - 0.5) * 0.8;
+    my = (e.clientY/window.innerHeight - 0.5) * 0.5;
+  });
+
+  /* Resize */
+  window.addEventListener('resize',()=>{
+    camera.aspect = window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  /* Animate */
+  let t = 0;
+  function animate(){
+    requestAnimationFrame(animate);
+    t += 0.008;
+
+    objects.forEach(o=>{
+      o.m.rotation.x += o.rx;
+      o.m.rotation.y += o.ry;
+      o.m.rotation.z += o.rz;
+    });
+
+    /* Float */
+    icoWire.position.y = 0.5 + Math.sin(t)*0.3;
+    icoSolid.position.y = 0.5 + Math.sin(t)*0.3;
+    toro.position.y = 0.5 + Math.sin(t)*0.3;
+    oct.position.y = 1.5 + Math.sin(t*1.3+1)*0.2;
+    octW.position.y = 1.5 + Math.sin(t*1.3+1)*0.2;
+    knot.position.y = -2.5 + Math.sin(t*0.9+2)*0.25;
+    dod.position.y = -2.5 + Math.sin(t*1.1+0.5)*0.2;
+
+    /* Mouse parallax */
+    camera.position.x += (mx - camera.position.x) * 0.04;
+    camera.position.y += (-my - camera.position.y) * 0.04;
+    camera.lookAt(scene.position);
+
+    renderer.render(scene, camera);
+  }
+  animate();
+})();
+
+/* ══ CURSOR ══ */
+const cur = document.getElementById('cur');
+const ring = document.getElementById('cur-ring');
+let mx2=0, my2=0, rx2=0, ry2=0;
+document.addEventListener('mousemove', e=>{mx2=e.clientX; my2=e.clientY; cur.style.left=mx2+'px'; cur.style.top=my2+'px';});
+(function loop(){rx2+=(mx2-rx2)*.11;ry2+=(my2-ry2)*.11;ring.style.left=rx2+'px';ring.style.top=ry2+'px';requestAnimationFrame(loop);})();
+document.body.addEventListener('mouseover', e=>{
+  if(e.target.closest('a,button')){cur.style.width='18px';cur.style.height='18px';ring.style.width='60px';ring.style.height='60px';}
+  else{cur.style.width='12px';cur.style.height='12px';ring.style.width='44px';ring.style.height='44px';}
+});
+
+/* ══ 3D TILT CARDS ══ */
+document.querySelectorAll('.tcard').forEach(card=>{
+  card.addEventListener('mousemove', e=>{
+    const r = card.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    card.style.transform = `perspective(600px) rotateY(${x*18}deg) rotateX(${-y*12}deg) translateZ(10px)`;
+  });
+  card.addEventListener('mouseleave', ()=>{
+    card.style.transform = 'perspective(600px) rotateX(0) rotateY(0) translateZ(0)';
+    card.style.transition = 'transform .5s cubic-bezier(0.22,1,0.36,1)';
+  });
+});
+
+/* ══ PROJECT CARD TILT ══ */
+document.querySelectorAll('.pcard').forEach(card=>{
+  card.addEventListener('mousemove', e=>{
+    const r = card.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    card.style.transform = `perspective(800px) rotateY(${x*10}deg) rotateX(${-y*7}deg) translateZ(8px)`;
+  });
+  card.addEventListener('mouseleave', ()=>{
+    card.style.transform = 'perspective(800px) rotateX(0) rotateY(0) translateZ(0)';
+  });
+});
+
+/* ══ NAV ══ */
+window.addEventListener('scroll',()=>{
+  document.getElementById('navbar').classList.toggle('on', scrollY>50);
+  const ids=['about','results','experience','projects','process','skills','services','education','contact'];
+  let a='';
+  ids.forEach(id=>{const el=document.getElementById(id);if(el&&el.getBoundingClientRect().top<110)a=id;});
+  document.querySelectorAll('.n-links a').forEach(l=>l.classList.toggle('on',l.dataset.id===a));
+});
+document.querySelectorAll('.n-links a').forEach(l=>{
+  const m=l.getAttribute('onclick');if(m){const id=m.match(/'([^']+)'/);if(id)l.dataset.id=id[1];}
+});
+function nav(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth'});}
+
+/* ══ MENU ══ */
+let menuOpen=false;
+function toggleMenu(){menuOpen=!menuOpen;document.getElementById('hamburger').classList.toggle('open',menuOpen);document.getElementById('mobMenu').classList.toggle('open',menuOpen);document.body.style.overflow=menuOpen?'hidden':'';}
+function closeMenu(){menuOpen=false;document.getElementById('hamburger').classList.remove('open');document.getElementById('mobMenu').classList.remove('open');document.body.style.overflow='';}
+
+/* ══ MODALS ══ */
+function openModal(id){document.getElementById(id).classList.add('open');document.body.style.overflow='hidden';}
+function closeModal(id){document.getElementById(id).classList.remove('open');document.body.style.overflow='';}
+document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)closeModal(o.id);}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.overlay.open').forEach(o=>closeModal(o.id));});
+
+/* ══ FORM ══ */
+function handleSubmit(){const b=document.getElementById('submitBtn');b.textContent='Sent ✓';b.style.background='linear-gradient(135deg,#4CAF50,#2E7D32)';setTimeout(()=>{b.textContent='Send Message →';b.style.background='';},3000);}
+
+/* ══ COPY ══ */
+function copyText(t){
+  navigator.clipboard?.writeText(t).catch(()=>{});
+  const el=document.getElementById('toast');
+  el.textContent='Copied: '+t;
+  el.style.opacity='1';el.style.transform='translateX(-50%) translateY(0)';
+  setTimeout(()=>{el.style.opacity='0';el.style.transform='translateX(-50%) translateY(12px)';},2200);
+}
+
+/* ══ INTERSECTION OBSERVER ══ */
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('vis');
+      e.target.querySelectorAll('.sb-fill').forEac
